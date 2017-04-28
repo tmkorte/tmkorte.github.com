@@ -186,3 +186,167 @@ Successful responses from the Content API contain the following top–level prop
 | data         | A subset of the results based on the limit and offset. See the next section for more information about the objects in the data array. |
 {:.table .table-responsive}
 
+### Data Object Properties
+
+Objects in the data array represent content for an embed.
+
+#### Common Properties
+
+All data objects have these properties.
+
+| name        | description                                                                               |
+| ----------- | ----------------------------------------------------------------------------------------- |
+| caption     | he user response to the caption of the first photo/video task in the submitting activity. |
+| description | The user response to the first free text task in the submitting activity.
+| identifier | A unique identifier assigned by the Rivet platform to a user’s responses to an activity. |
+| likes | Number of times viewers of this content clicked the like icon in the Rivet embed.
+| imageURL | URL to the photo or the first frame of the video submitted by a user to the first photo/video task in the activity. This is the default 640x640 image the Rivet platform automatically generates. |
+| mediaThumbURL | URL to a smaller version of the photo or the first frame of a video. |
+| mediaID | Unique identifier for a piece of content in the Rivet system. |
+| mediaType | Type of content; either photo or video. |
+| tags | Any tags associated with the content. |
+{:.table .table-responsive}
+
+#### Ingredient Properties
+Each object in the ingredients array have the following properties in common.
+
+| name | description |
+| ---- | ----------- |
+| ingredientType | |
+| name | |
+| taskId | |
+| displayLabel | |
+{:.table .table-responsive}
+
+
+#### Ingredient Types
+
+The following lists all possible ingredient types.
+
+- Location	
+- MultiSelect	
+- Photo	
+- QuestionGroup	
+- Rating	
+- SingleSelect	
+- Slider	
+- SocialUser	
+- Text	
+- Video	
+
+#### Ingredient Primitives	
+
+Each type of ingredient has properties specific to that type. Ingredient–specific properties are called primitives. The following is a list of possible primitives.
+
+| name | description |
+| ---- | ----------- |
+| Link |  |
+| Numeric	 |  |
+| Photo	 |  |
+| Text	 |  |
+| Video	 |  |
+| YouTube	 |  |
+{:.table .table-responsive}
+
+#### Location Ingredient
+
+Primitive properties that apply to location ingredient types.
+
+| name | description |
+| ---- | ----------- |
+| latitude | URL to the image with a resolution as configured in the Rivet Administrative Interface. This is the custom resolution image the Rivet platform generates based on the photo task configuration. |
+| longitude | URL to the original full resolution photo the user submitted. |
+| locationText | |
+| googlePlaceId | |
+{:.table .table-responsive}
+
+#### MultiSelect Ingredient
+
+Primitive properties that apply to multi select ingredient types.
+
+| name | description |
+| ---- | ----------- |
+| choices |	|
+{:.table .table-responsive}
+
+#### Photo Ingredient
+
+Primitive properties that apply to photo ingredient types.
+
+| name | description |
+| ---- | ----------- |
+| photo | URL to the image with a resolution as configured in the Rivet Administrative Interface. This is the custom resolution image the Rivet platform generates based on the photo task configuration. |
+| display640Square | URL to the original full resolution photo the user submitted. |
+| display640Original | |
+| title | |
+| thumbnail | |
+{:.table .table-responsive}
+
+
+Question Group Ingredient
+Primitive properties that apply only to question group ingredients.
+name	description
+duration	Duration of the video in seconds.
+height	Height of the video in pixels.
+width	Width of the video in pixels.
+videoURL	URL to the video content.
+
+Rating Ingredient
+Primitive properties that apply to rating ingredient types.
+name	description
+rating	URL to the image with a resolution as configured in the Rivet Administrative Interface. This is the custom resolution image the Rivet platform generates based on the photo task configuration.
+
+SingleSelect Ingredient
+Primitive properties that apply to multi select ingredient types.
+name	description
+choice	URL to the image with a resolution as configured in the Rivet Administrative Interface. This is the custom resolution image the Rivet platform generates based on the photo task configuration.
+
+Slider Ingredient
+Primitive properties that apply to slider ingredient types.
+name	description
+value	Link to the picture or video on a social network such as Instagram.
+startLabel	Name of a user in a social network such as Instagram.
+endLabel	URL to the profile picture of the social network user.
+points	
+
+SocialUser Ingredient
+Primitive properties that apply to social user ingredient types.
+name	description
+userName	Link to the picture or video on a social network such as Instagram.
+userImage	Name of a user in a social network such as Instagram.
+userLink	URL to the profile picture of the social network user.
+profileProvider	
+
+Text Ingredient
+Primitive properties that apply to text ingredient types.
+name	description
+text	Link to the picture or video on a social network such as Instagram.
+
+Video Ingredient
+Primitive properties that apply to video ingredient types.
+name	description
+photo	URL to the image with a resolution as configured in the Rivet Administrative Interface. This is the custom resolution image the Rivet platform generates based on the photo task configuration.
+display640Square	URL to the original full resolution photo the user submitted.
+display640Original	
+title	
+thumbnail	
+video	
+
+Errors
+If the API encounters an error, the response from the API is the following.
+{ 
+  "success": false, 
+  "error": -1, 
+  "reason": "Technical difficulties"
+}
+		
+-1	Technical difficulties	An unexpected error has occurred. Contact Rivet Support at support@rivet.works for assistance.
+-2	Search error	An error has occurred with the Rivet search engine. Contact Rivet Support at support@rivet.works for assistance.
+-6	Embed not found	The call to the API specifies an embed that is not in the Rivet system.
+-5	Limit must be one or greater	You must ask for at least one content item.
+-4	Offset must be zero or greater	The offset into the results cannot be negative.
+-3	Error in qualifier	The qualifier is not Rison encoded correctly. The API includes additional information about where the encoding error is in the Rison.
+
+CORS
+The API is CORS compliant. If JavaScript from a web page calls the API, the browser must send CORS headers.
+
