@@ -122,7 +122,7 @@ http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=24&i=1928
 
 The response from the API is a JSON object. Below is an example of a response from the API.
 
-``` json
+``` 
 {
   "success": true,
   "totalResults": 2,
