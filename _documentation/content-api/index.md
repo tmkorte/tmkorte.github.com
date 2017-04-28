@@ -219,7 +219,7 @@ Each object in the ingredients array have the following properties in common.
 {:.table .table-responsive}
 
 
-#### Ingredient Types
+##### Ingredient Types
 
 The following lists all possible ingredient types.
 
