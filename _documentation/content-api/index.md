@@ -283,70 +283,91 @@ Primitive properties that apply to photo ingredient types.
 {:.table .table-responsive}
 
 
-Question Group Ingredient
-Primitive properties that apply only to question group ingredients.
-name	description
-duration	Duration of the video in seconds.
-height	Height of the video in pixels.
-width	Width of the video in pixels.
-videoURL	URL to the video content.
+#### Question Group Ingredient
 
-Rating Ingredient
+Properties that apply only to question group ingredients.
+
+| name | description |
+| ---- | ----------- |
+{:.table .table-responsive}
+
+#### Rating Ingredient
+
 Primitive properties that apply to rating ingredient types.
-name	description
-rating	URL to the image with a resolution as configured in the Rivet Administrative Interface. This is the custom resolution image the Rivet platform generates based on the photo task configuration.
 
-SingleSelect Ingredient
+| name | description |
+| ---- | ----------- |
+{:.table .table-responsive}
+
+#### SingleSelect Ingredient
+
 Primitive properties that apply to multi select ingredient types.
-name	description
-choice	URL to the image with a resolution as configured in the Rivet Administrative Interface. This is the custom resolution image the Rivet platform generates based on the photo task configuration.
 
-Slider Ingredient
+| name | description |
+| ---- | ----------- |
+{:.table .table-responsive}
+
+#### Slider Ingredient
+
 Primitive properties that apply to slider ingredient types.
-name	description
-value	Link to the picture or video on a social network such as Instagram.
-startLabel	Name of a user in a social network such as Instagram.
-endLabel	URL to the profile picture of the social network user.
-points	
 
-SocialUser Ingredient
+| name | description |
+| ---- | ----------- |
+{:.table .table-responsive}
+
+#### SocialUser Ingredient
+
 Primitive properties that apply to social user ingredient types.
-name	description
-userName	Link to the picture or video on a social network such as Instagram.
-userImage	Name of a user in a social network such as Instagram.
-userLink	URL to the profile picture of the social network user.
-profileProvider	
 
-Text Ingredient
+| name | description |
+| ---- | ----------- |
+{:.table .table-responsive}
+
+#### Text Ingredient
+
 Primitive properties that apply to text ingredient types.
-name	description
-text	Link to the picture or video on a social network such as Instagram.
 
-Video Ingredient
+| name | description |
+| ---- | ----------- |
+{:.table .table-responsive}
+
+#### Video Ingredient
+
 Primitive properties that apply to video ingredient types.
-name	description
-photo	URL to the image with a resolution as configured in the Rivet Administrative Interface. This is the custom resolution image the Rivet platform generates based on the photo task configuration.
-display640Square	URL to the original full resolution photo the user submitted.
-display640Original	
-title	
-thumbnail	
-video	
 
-Errors
+| name | description |
+| ---- | ----------- |
+|photo | URL to the image with a resolution as configured in the Rivet Administrative Interface. This is the custom resolution image the Rivet platform generates based on the photo task configuration. |
+| display640Square | URL to the original full resolution photo the user submitted. |
+| display640Original | |
+| title | |
+| thumbnail | |
+| video | |
+{:.table .table-responsive}
+
+### Errors
+
 If the API encounters an error, the response from the API is the following.
+
+```
 { 
   "success": false, 
   "error": -1, 
   "reason": "Technical difficulties"
 }
-		
--1	Technical difficulties	An unexpected error has occurred. Contact Rivet Support at support@rivet.works for assistance.
--2	Search error	An error has occurred with the Rivet search engine. Contact Rivet Support at support@rivet.works for assistance.
--6	Embed not found	The call to the API specifies an embed that is not in the Rivet system.
--5	Limit must be one or greater	You must ask for at least one content item.
--4	Offset must be zero or greater	The offset into the results cannot be negative.
--3	Error in qualifier	The qualifier is not Rison encoded correctly. The API includes additional information about where the encoding error is in the Rison.
+```
 
-CORS
+| code | message | description |	
+| ---- | ------- | ----------- |	
+| -1 | Technical difficulties | An unexpected error has occurred. Contact Rivet Support at support@rivet.works for assistance. |
+| -2 | Search error | An error has occurred with the Rivet search engine. Contact Rivet Support at support@rivet.works for assistance. |
+| -6 | Embed not found | The call to the API specifies an embed that is not in the Rivet system. |
+| -5 | Limit must be one or greater	You must ask for at least one content item. |
+| -4 | Offset must be zero or greater | The offset into the results cannot be negative. |
+| -3 | Error in qualifier | The qualifier is not Rison encoded correctly. The API includes additional information about where the encoding error is in the Rison. |
+{:.table .table-responsive}
+
+### CORS
+
 The API is CORS compliant. If JavaScript from a web page calls the API, the browser must send CORS headers.
 
