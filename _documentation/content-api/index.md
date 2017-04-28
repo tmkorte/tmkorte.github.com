@@ -10,7 +10,9 @@ The Content API returns user generated content based on an embed’s data and mo
 
 You call the API using the following endpoint. This example returns 24 pieces of content starting at the beginning of the results set.
 
-`http://api.rivet.works/embedded/data/{embedIdentifier}`
+```
+http://api.rivet.works/embedded/data/{embedIdentifier}
+```
 
 The “embedIdentifier” at the end of the URL is the ID that the Rivet platform assigned to the embed. You can also define a unique embed key in the Rivet Administrative Interface and use that in the API call. The embed key allows for “friendlier” URL formats. Each embed key must be unique across the Rivet platform.
 
