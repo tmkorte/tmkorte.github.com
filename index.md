@@ -5,3 +5,7 @@
 layout: home
 ---
 This is the Rivet Works developer site.
+
+{% for document in site.documentation %}
+[{{document.title}}]({{document.url}})
+{% endfor %}
