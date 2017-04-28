@@ -42,7 +42,7 @@ Filtering with the Content API is very similar to the embed’s page context. Th
 
 The following is an example of a JSON page context and its corresponding Rison qualifier:
 
-JSON
+#### JSON
 
 ``` json
 "pageContext": {
@@ -58,10 +58,129 @@ JSON
  }
  
 ```
-Rison
+#### Rison
 
 `
 (t:(city:!(Austin,London),type:day),g:(lat:40.833333333,lon:14.25,r:'5 km')
 `
 
 For more information about Rison please see https://github.com/Nanonid/rison
+
+### Qualifier Keys
+
+The qualifier supports two top-level keys for tags and geolocations. See the section “Website Integration” in the “Rivet Implementation Guide” for more information about the tags and geoRegion qualifiers.
+
+| name | description                                                |
+| ---- | ---------------------------------------------------------- |
+| t    | Analogous to the tags key in an embed’s page context.      |
+| g    | Analogous to the geoRegion key in an embed’s page context. |
+| s    |                                                            |
+
+**Note:** While the top-level Rison keys are shortened to make request URLs more compact, the keys of the tags and geoRegion objects are not shortened.
+
+### Examples
+Below are examples of calls to the API. The qualifier parameters in the examples are not URL encoded for ease of reading. In production use, the qualifier should be URL encoded.
+
+#### Loading the first “page” of content with 24 pieces of content per page:
+```
+http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=0
+```
+
+#### Loading the second page of content.
+Notice that the limit is added to the offset for each page.
+```
+http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=24
+```
+
+#### Calling the API with a JSONP callback function.
+This is how Rivet’s embeds most often uses the API. This example results in a call to the window.dataLoaded function with the response from the API as the only parameter. It is up to you to write the callback function.
+``` 
+http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=24&callback=window.dataLoaded
+```
+
+#### Using the API with a filter for responses tagged with a SKU of M1234/LL.
+``` 
+http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=24&q=(t:(sku:M1234/LL))
+```
+
+#### Tracking your user using the tracking identifier.
+``` 
+http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=24&i=192837
+```
+
+#### Getting responses within a 5 mile radius of a location tagged with summer.
+
+``` 
+http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=24&i=192837&q=(g:(lat:40.833333333,lon:14.25,r:'5 mi'),t:(season:summer))
+```
+
+### Sorting Results
+
+## Responses from the API
+
+The response from the API is a JSON object. Below is an example of a response from the API.
+
+``` json
+{
+  "success": true,
+  "totalResults": 2,
+  "data": [
+    {
+      "caption": "London Day",
+      "description": "Facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum.", 
+      "externalLink": null, 
+      "identifier": {
+        "id": "802962f3-7d49-11e3-8b58-28cfe91db661",
+        "type": "MemberActivity"
+      },
+      "imageURL": "//media.rivet.works/3b806861789d4a4ca41c06589abc624b.jpeg",
+      "likes": 0, 
+      "mediaDisplayURL": null, 
+      "mediaID": "802962f3-7d49-11e3-8b58-28cfe91db661",
+      "mediaOriginalURL": null, 
+      "mediaThumbURL": "//media.rivet.works/3b806861789d4a4ca41c06589abc624b.jpeg",
+      "mediaType": "Photo",
+      "tags": {
+        "city": ["London" ],
+        "type": ["day"]
+      },
+      "userName": null, 
+      "userProfilePictureURL": null 
+},
+    {
+      "caption": "My last Mad Dog",
+      "description": null, 
+      "duration": 10, 
+      "externalLink": null, 
+      "height": 240, 
+      "identifier": {
+        "id": "14c6cffa-d617-11e3-9983-28cfe91db661",
+        "type": "MemberActivity"
+      },
+      "imageURL": "//media.rivet.works/video/98eb4be9293d4ba4a81e67711f16bdac/thumb-00001.jpg",
+      "likes": 0, 
+      "mediaDisplayURL": null, 
+      "mediaID": "14c6cffa-d617-11e3-9983-28cfe91db661",
+      "mediaOriginalURL": null, 
+      "mediaThumbURL": "//media.rivet.works/video/98eb4be9293d4ba4a81e67711f16bdac/thumb-00001.jpg",
+      "mediaType": "Video",
+      "tags": {},
+      "userName": null, 
+      "userProfilePictureURL": null, 
+      "videoURL": "//media.rivet.works/video/98eb4be9293d4ba4a81e67711f16bdac/h264/video.mp4",
+      "width": 320
+    }
+  ]
+}
+```
+### Response Properties
+
+Successful responses from the Content API contain the following top–level properties.
+
+| name         | description                                                                                                                           |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| success      | Indicates the success of the API call; true for successful execution and false if there is an error.                                  |
+| totalResults | The number of items that the API found for the embed that match the search qualifiers.                                                |
+| data         | A subset of the results based on the limit and offset. See the next section for more information about the objects in the data array. |
+{:.table .table-responsive}
+
