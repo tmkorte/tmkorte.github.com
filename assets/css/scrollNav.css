@@ -1,0 +1,35 @@
+.scroll-nav {
+    max-height: 100vh;
+    overflow-y: auto;
+}
+.scroll-nav__list, 
+.scroll-nav__sub-list {
+    list-style-type: none;
+}
+.scroll-nav__list {
+    font-size: 14px;
+}
+.scroll-nav__item {
+
+}
+.scroll-nav__item.active {
+
+}
+.scroll-nav__sub-list {
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+    will-change: max-height;
+    font-size: 12px;
+    display: none;
+    /*max-height: 0;*/
+}
+.scroll-nav__item.in-view .scroll-nav__sub-list {
+    display: block;
+    /*max-height: 100vh;*/
+}
+.scroll-nav__sub-item {
+
+}
+.scroll-nav__sub-item.active {
+
+}
