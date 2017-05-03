@@ -2,9 +2,9 @@
 layout: page
 title: Rivet Content API
 ---
-The Rivet Platform allows brands and retailers to collect a variety of engaging user generated content – including rich media (photos and videos), geolocation, and commentary – directly from their customers. Rivet offers a collection of embeddable JavaScript displays, called embeds, that allow brands and retailers to easily display the user generated content on their own websites using only a few lines of code. For those customers in search of a more custom display experience, we offer the Rivet Content API. Customers can use the API to create their own galleries of user generated content and integrate the content anywhere on their website.
+The Rivet Platform allows brands and retailers to collect a variety of engaging user generated content – including rich media (photos and videos), geolocation, and commentary – directly from their customers. Rivet offers a collection of embeddable JavaScript displays that allow brands and retailers to easily display the user generated content on their own websites using only a few lines of code. For those customers in search of a more custom display experience, we offer the Rivet Content API. Customers can use the API to create their own galleries of user generated content and integrate the content anywhere on their website.
 
-The Content API returns user generated content based on an embed’s data and moderation configuration. Customers create and configure embeds using the Rivet Administrative Interface. The Content API also allows for filtering the results it returns based on tags and location data associated with the content.
+The Content API returns user generated content based on an display’s data and moderation configuration. Customers create and configure displays using the Rivet Administrative Interface. The Content API also allows for filtering the results it returns based on tags and location data associated with the content.
 
 ## Calling the API
 
@@ -14,7 +14,7 @@ You call the API using the following endpoint. This example returns 24 pieces of
 http://api.rivet.works/embedded/data/{embedIdentifier}
 ```
 
-The “embedIdentifier” at the end of the URL is the ID that the Rivet platform assigned to the embed. You can also define a unique embed key in the Rivet Administrative Interface and use that in the API call. The embed key allows for “friendlier” URL formats. Each embed key must be unique across the Rivet platform.
+The “embedIdentifier” at the end of the URL is the ID that the Rivet platform assigned to the display. You can also define a unique display key in the Rivet Administrative Interface and use that in the API call. The display key allows for “friendlier” URL formats. Each display key must be unique across the Rivet platform.
 
 ### Optional Query Parameters
 
@@ -34,11 +34,11 @@ The “embedIdentifier” at the end of the URL is the ID that the Rivet platfor
 
 The Content API allows you to filter results using tags and location data. Tags are assigned to content when users complete a Rivet activity. Also, moderators using the Rivet Administrative Interface can edit the tags for user activity submissions.  Location data is based on the geolocation information provided by the user or that an uploaded photo contains.
 
-Rivet embeds use what is called a page context to tell the API how to filter results. The page context is a JSON object that specifies which tags and/or geolocation response content must match for the API to include them in the results. The page context supports a variety of logical expressions for customizing filtering criteria.
+Rivet displays use what is called a page context to tell the API how to filter results. The page context is a JSON object that specifies which tags and/or geolocation response content must match for the API to include them in the results. The page context supports a variety of logical expressions for customizing filtering criteria.
 
 For more information about the page context see the section “Website Integration” in the “Rivet Technical Integration Guide.” 
 
-Filtering with the Content API is very similar to the embed’s page context. The API calls its filtering parameter qualifier. Instead of being a JSON object as is the embed’s page context, the qualifier for the API is expressed as Rison. The API uses Rison because it is more compact than JSON and better suited for expressing a complex object as a query parameter.
+Filtering with the Content API is very similar to the display’s page context. The API calls its filtering parameter qualifier. Instead of being a JSON object as is the display’s page context, the qualifier for the API is expressed as Rison. The API uses Rison because it is more compact than JSON and better suited for expressing a complex object as a query parameter.
 
 **Note:** The Rison qualifier must be URL encoded.
 
@@ -72,11 +72,11 @@ For more information about Rison please see https://github.com/Nanonid/rison
 
 The qualifier supports two top-level keys for tags and geolocations. See the section “Website Integration” in the “Rivet Implementation Guide” for more information about the tags and geoRegion qualifiers.
 
-| name | description                                                |
-| ---- | ---------------------------------------------------------- |
-| t    | Analogous to the tags key in an embed’s page context.      |
-| g    | Analogous to the geoRegion key in an embed’s page context. |
-| s    |                                                            |
+| name | description                                                  |
+| ---- | ------------------------------------------------------------ |
+| t    | Analogous to the tags key in an display’s page context.      |
+| g    | Analogous to the geoRegion key in an display’s page context. |
+| s    |                                                              |
 
 **Note:** While the top-level Rison keys are shortened to make request URLs more compact, the keys of the tags and geoRegion objects are not shortened.
 
@@ -95,7 +95,7 @@ http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=24
 ```
 
 #### Calling the API with a JSONP callback function.
-This is how Rivet’s embeds most often uses the API. This example results in a call to the window.dataLoaded function with the response from the API as the only parameter. It is up to you to write the callback function.
+This is how Rivet’s displays most often uses the API. This example results in a call to the window.dataLoaded function with the response from the API as the only parameter. It is up to you to write the callback function.
 ``` 
 http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=24&callback=window.dataLoaded
 ```
@@ -182,15 +182,15 @@ Successful responses from the Content API contain the following top–level prop
 | name         | description                                                                                                                           |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
 | success      | Indicates the success of the API call; true for successful execution and false if there is an error.                                  |
-| totalResults | The number of items that the API found for the embed that match the search qualifiers.                                                |
+| totalResults | The number of items that the API found for the display that match the search qualifiers.                                                |
 | data         | A subset of the results based on the limit and offset. See the next section for more information about the objects in the data array. |
 {:.table .table-responsive}
 
-### Data Object Properties
+## Data Objects
 
-Objects in the data array represent content for an embed.
+Objects in the data array represent content for a display.
 
-#### Common Properties
+### Common Properties
 
 All data objects have these properties.
 
@@ -199,7 +199,7 @@ All data objects have these properties.
 | caption     | he user response to the caption of the first photo/video task in the submitting activity. |
 | description | The user response to the first free text task in the submitting activity.
 | identifier | A unique identifier assigned by the Rivet platform to a user’s responses to an activity. |
-| likes | Number of times viewers of this content clicked the like icon in the Rivet embed.
+| likes | Number of times viewers of this content clicked the like icon in the Rivet display.
 | imageURL | URL to the photo or the first frame of the video submitted by a user to the first photo/video task in the activity. This is the default 640x640 image the Rivet platform automatically generates. |
 | mediaThumbURL | URL to a smaller version of the photo or the first frame of a video. |
 | mediaID | Unique identifier for a piece of content in the Rivet system. |
@@ -207,7 +207,7 @@ All data objects have these properties.
 | tags | Any tags associated with the content. |
 {:.table .table-responsive}
 
-#### Ingredient Properties
+### Ingredient Properties
 Each object in the ingredients array have the following properties in common.
 
 | name | description |
@@ -219,7 +219,7 @@ Each object in the ingredients array have the following properties in common.
 {:.table .table-responsive}
 
 
-##### Ingredient Types
+#### Ingredient Types
 
 The following lists all possible ingredient types.
 
@@ -234,7 +234,7 @@ The following lists all possible ingredient types.
 - Text	
 - Video	
 
-#### Ingredient Primitives	
+### Ingredient Primitives	
 
 Each type of ingredient has properties specific to that type. Ingredient–specific properties are called primitives. The following is a list of possible primitives.
 
@@ -248,7 +248,11 @@ Each type of ingredient has properties specific to that type. Ingredient–speci
 | YouTube	 |  |
 {:.table .table-responsive}
 
-#### Location Ingredient
+## Ingredients
+
+The following sections details each of the differnt kinds of ingredients that make up data objects.
+
+### Location
 
 Primitive properties that apply to location ingredient types.
 
@@ -260,7 +264,7 @@ Primitive properties that apply to location ingredient types.
 | googlePlaceId | |
 {:.table .table-responsive}
 
-#### MultiSelect Ingredient
+### Multi–Select
 
 Primitive properties that apply to multi select ingredient types.
 
@@ -269,7 +273,7 @@ Primitive properties that apply to multi select ingredient types.
 | choices |	|
 {:.table .table-responsive}
 
-#### Photo Ingredient
+### Photo
 
 Primitive properties that apply to photo ingredient types.
 
@@ -283,7 +287,7 @@ Primitive properties that apply to photo ingredient types.
 {:.table .table-responsive}
 
 
-#### Question Group Ingredient
+### Question Group
 
 Properties that apply only to question group ingredients.
 
@@ -291,7 +295,7 @@ Properties that apply only to question group ingredients.
 | ---- | ----------- |
 {:.table .table-responsive}
 
-#### Rating Ingredient
+### Rating
 
 Primitive properties that apply to rating ingredient types.
 
@@ -299,7 +303,7 @@ Primitive properties that apply to rating ingredient types.
 | ---- | ----------- |
 {:.table .table-responsive}
 
-#### SingleSelect Ingredient
+### Single–Select
 
 Primitive properties that apply to multi select ingredient types.
 
@@ -307,7 +311,7 @@ Primitive properties that apply to multi select ingredient types.
 | ---- | ----------- |
 {:.table .table-responsive}
 
-#### Slider Ingredient
+### Slider
 
 Primitive properties that apply to slider ingredient types.
 
@@ -315,7 +319,7 @@ Primitive properties that apply to slider ingredient types.
 | ---- | ----------- |
 {:.table .table-responsive}
 
-#### SocialUser Ingredient
+### SocialUser
 
 Primitive properties that apply to social user ingredient types.
 
@@ -323,7 +327,7 @@ Primitive properties that apply to social user ingredient types.
 | ---- | ----------- |
 {:.table .table-responsive}
 
-#### Text Ingredient
+### Text
 
 Primitive properties that apply to text ingredient types.
 
@@ -331,7 +335,7 @@ Primitive properties that apply to text ingredient types.
 | ---- | ----------- |
 {:.table .table-responsive}
 
-#### Video Ingredient
+### Video
 
 Primitive properties that apply to video ingredient types.
 
@@ -345,7 +349,7 @@ Primitive properties that apply to video ingredient types.
 | video | |
 {:.table .table-responsive}
 
-### Errors
+## Errors
 
 If the API encounters an error, the response from the API is the following.
 
@@ -361,13 +365,13 @@ If the API encounters an error, the response from the API is the following.
 | ---- | ------- | ----------- |	
 | -1 | Technical difficulties | An unexpected error has occurred. Contact Rivet Support at support@rivet.works for assistance. |
 | -2 | Search error | An error has occurred with the Rivet search engine. Contact Rivet Support at support@rivet.works for assistance. |
-| -6 | Embed not found | The call to the API specifies an embed that is not in the Rivet system. |
+| -6 | display not found | The call to the API specifies an display that is not in the Rivet system. |
 | -5 | Limit must be one or greater	You must ask for at least one content item. |
 | -4 | Offset must be zero or greater | The offset into the results cannot be negative. |
 | -3 | Error in qualifier | The qualifier is not Rison encoded correctly. The API includes additional information about where the encoding error is in the Rison. |
 {:.table .table-responsive}
 
-### CORS
+## CORS
 
 The API is CORS compliant. If JavaScript from a web page calls the API, the browser must send CORS headers.
 

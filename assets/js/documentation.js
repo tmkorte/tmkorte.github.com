@@ -1,6 +1,6 @@
 $('.doc-body').scrollNav({
-    sections: 'h2, h3',
-    subSections: 'h4',
+    sections: 'h2',
+    subSections: 'h3',
     sectionElem: 'section',
     showHeadline: false,
     headlineText: 'Scroll To',
