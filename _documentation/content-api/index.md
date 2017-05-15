@@ -36,49 +36,79 @@ The Content API allows you to filter results using tags and location data. Tags 
 
 Rivet displays use what is called a page context to tell the API how to filter results. The page context is a JSON object that specifies which tags and/or geolocation response content must match for the API to include them in the results. The page context supports a variety of logical expressions for customizing filtering criteria.
 
-For more information about the page context see the section “Website Integration” in the “Rivet Technical Integration Guide.” 
+For more information about the page context see the section “Website Integration” in the “Rivet Technical Integration Guide.”
 
-Filtering with the Content API is very similar to the display’s page context. The API calls its filtering parameter qualifier. Instead of being a JSON object as is the display’s page context, the qualifier for the API is expressed as Rison. The API uses Rison because it is more compact than JSON and better suited for expressing a complex object as a query parameter.
-
-**Note:** The Rison qualifier must be URL encoded.
+Filtering with the Content API is very similar to the display’s page context. The API calls its filtering parameter `qualifier`. Instead of being a JSON object as is the display’s page context, the qualifier for the API is expressed as Rison. The API uses Rison because it is more compact than JSON and better suited for expressing a complex object as a query parameter.
 
 The following is an example of a JSON page context and its corresponding Rison qualifier:
 
 #### JSON
 
-``` json
+```
 "pageContext": {
    "tags": {
     "city": ["Austin", "London"],
     "type": "day"
    },
    "geoRegion": {
-    "lat": 40.833333333, 
-    "lon": 14.25, 
+    "lat": 40.833333333,
+    "lon": 14.25,
     "r": "5 km"
   }
  }
- 
 ```
 #### Rison
 
-`
+```
 (t:(city:!(Austin,London),type:day),g:(lat:40.833333333,lon:14.25,r:'5 km')
-`
+```
+
+**Note:** The Rison qualifier must be URL encoded.
+{:.fa-thumbs-up.icon-holder .callout-block .callout-success}
+
 
 For more information about Rison please see https://github.com/Nanonid/rison
+### Showing specific content
 
-### Qualifier Keys
+In addition to filtering it is possible to request specific pieces of content from the API. You can ask for content by its submission identifier. This Rivet Administrative Interface shows submission identifiers in the moderation interface. The submission identifier is also in the response from the Content API at the `identifier.id` path for each data element.
 
-The qualifier supports two top-level keys for tags and geolocations. See the section “Website Integration” in the “Rivet Implementation Guide” for more information about the tags and geoRegion qualifiers.
+The following is an example of a JSON page context that asks for two specific pieces of content followed by it's corresponding Rison qualifier:
 
-| name | description                                                  |
-| ---- | ------------------------------------------------------------ |
-| t    | Analogous to the tags key in an display’s page context.      |
-| g    | Analogous to the geoRegion key in an display’s page context. |
-| s    |                                                              |
+#### JSON
+
+```
+"pageContext": {
+  {
+    "submissionIds": [
+      "4992d848-d0f0-11e5-9577-22000afe5763",
+      "7bafdc00-bba0-11e5-9356-22000ae60646"
+    ]
+  }
+ }
+```
+#### Rison
+
+```
+(s:!('4992d848-d0f0-11e5-9577-22000afe5763','7bafdc00-bba0-11e5-9356-22000ae60646'))
+```
+
+**Note:** The Rison qualifier must be URL encoded.
+{:.fa-thumbs-up.icon-holder .callout-block .callout-success}
+
+
+### Qualifier keys
+
+The qualifier supports three top-level keys for tags, geolocations, and submission identifiers. See the section “Website Integration” in the “Rivet Implementation Guide” for more information about the tags and geoRegion qualifiers.
+
+| name | description                                                    |
+| ---- | -------------------------------------------------------------- |
+| t    | Analogous to the tags key in a display’s page context.         |
+| g    | Analogous to the geoRegion key in a display’s page context.    |
+| s    | Analogous to the submissionIds key in a display’s page context |
+{:.table .table-responsive}
 
 **Note:** While the top-level Rison keys are shortened to make request URLs more compact, the keys of the tags and geoRegion objects are not shortened.
+{:.fa-thumbs-up.icon-holder .callout-block .callout-success}
 
 ### Examples
 Below are examples of calls to the API. The qualifier parameters in the examples are not URL encoded for ease of reading. In production use, the qualifier should be URL encoded.
@@ -96,88 +126,363 @@ http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=24
 
 #### Calling the API with a JSONP callback function.
 This is how Rivet’s displays most often uses the API. This example results in a call to the window.dataLoaded function with the response from the API as the only parameter. It is up to you to write the callback function.
-``` 
+```
 http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=24&callback=window.dataLoaded
 ```
 
 #### Using the API with a filter for responses tagged with a SKU of M1234/LL.
-``` 
+```
 http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=24&q=(t:(sku:M1234/LL))
 ```
 
 #### Tracking your user using the tracking identifier.
-``` 
+```
 http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=24&i=192837
 ```
 
 #### Getting responses within a 5 mile radius of a location tagged with summer.
 
-``` 
+```
 http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=24&i=192837&q=(g:(lat:40.833333333,lon:14.25,r:'5 mi'),t:(season:summer))
 ```
 
 ### Sorting Results
 
+**_TO DO_** Modo typi qui nunc nobis videntur parum clari fiant sollemnes in. Doming id quod mazim placerat facer possim assum typi non habent. Insitam est usus legentis in iis qui facit eorum claritatem Investigationes demonstraverunt lectores legere! Nam liber tempor cum soluta nobis eleifend option congue nihil. Sed diam nonummy nibh euismod tincidunt, ut laoreet dolore magna aliquam erat volutpat ut!
+
+Veniam quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut. Assum typi non habent claritatem insitam est usus legentis in iis. Te feugait nulla facilisi nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet. Claritas est etiam processus dynamicus qui sequitur mutationem consuetudium lectorum mirum est notare quam littera. Consequat duis autem vel eum iriure, dolor in hendrerit. Commodo in vulputate velit esse molestie consequat vel illum dolore. Diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+
+Mazim placerat facer possim assum typi non habent claritatem insitam est usus. Vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio. Lobortis nisl ut aliquip ex ea commodo consequat duis autem vel eum iriure. Ut laoreet dolore magna aliquam erat volutpat ut wisi enim ad minim veniam quis. In vulputate velit esse molestie consequat dignissim qui. Nunc nobis videntur parum clari fiant sollemnes in.
+
+
 ## Responses from the API
 
-The response from the API is a JSON object. Below is an example of a response from the API.
+The response from the API is a JSON object. Below is an example of a response from the API from the display for the [Rivet culture page](http://www.rivet.works/our-culture).
 
-``` 
+```
 {
-  "success": true,
-  "totalResults": 2,
+  "aggregations": {
+  },
+  "configuration": null,
   "data": [
     {
-      "caption": "London Day",
-      "description": "Facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum.", 
-      "externalLink": null, 
       "identifier": {
-        "id": "802962f3-7d49-11e3-8b58-28cfe91db661",
+        "id": "4992d848-d0f0-11e5-9577-22000afe5763",
         "type": "MemberActivity"
       },
-      "imageURL": "//media.rivet.works/3b806861789d4a4ca41c06589abc624b.jpeg",
-      "likes": 0, 
-      "mediaDisplayURL": null, 
-      "mediaID": "802962f3-7d49-11e3-8b58-28cfe91db661",
-      "mediaOriginalURL": null, 
-      "mediaThumbURL": "//media.rivet.works/3b806861789d4a4ca41c06589abc624b.jpeg",
-      "mediaType": "Photo",
+      "ingredients": [
+        {
+          "displayLabel": "Where it happened:",
+          "googlePlaceID": {
+            "primitiveType": "Text",
+            "text": "ChIJS40b8fPMRIYRlTUN5qUlQXM"
+          },
+          "ingredientType": "Location",
+          "latitude": {
+            "primitiveType": "Numeric",
+            "value": 30.41851
+          },
+          "locationText": {
+            "primitiveType": "Text",
+            "text": "Chuy's"
+          },
+          "longitude": {
+            "primitiveType": "Numeric",
+            "value": -97.74786399999999
+          },
+          "taskId": "cbe64eca-3c93-11e5-b061-22000a128c8c"
+        },
+        {
+          "display640Original": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/da1ca17c7ed64e47969e63ab4424fe8b.jpeg"
+          },
+          "display640Square": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/ff0f6227b3b44b56b1b0519cf1b67067.jpeg"
+          },
+          "ingredientType": "Photo",
+          "name": "Hero media",
+          "photo": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/ff0f6227b3b44b56b1b0519cf1b67067.jpeg"
+          },
+          "taskId": "775e7972-3c93-11e5-ae1e-22000a128c8c",
+          "thumbnail": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/ff0f6227b3b44b56b1b0519cf1b67067.jpeg"
+          },
+          "title": {
+            "primitiveType": "Text",
+            "text": "Roads... We don't need roads"
+          }
+        },
+        {
+          "display640Original": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/16c2a26e18ae4f24b9dc18f07e36fe73.jpeg"
+          },
+          "display640Square": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/c03de5be6c6e4c83ae0bb6915556f769.jpeg"
+          },
+          "ingredientType": "Photo",
+          "photo": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/c03de5be6c6e4c83ae0bb6915556f769.jpeg"
+          },
+          "taskId": "9d235416-3c93-11e5-bfdd-22000a24170b",
+          "thumbnail": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/c03de5be6c6e4c83ae0bb6915556f769.jpeg"
+          },
+          "title": {
+            "primitiveType": "Text",
+            "text": "1.21 gigawatts"
+          }
+        },
+        {
+          "display640Square": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/video/fc39c4bee1934eacbf1bc52bbb2fd513/thumb-00001.jpg"
+          },
+          "ingredientType": "Video",
+          "photo": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/video/fc39c4bee1934eacbf1bc52bbb2fd513/thumb-00001.jpg"
+          },
+          "taskId": "b767d55e-3c93-11e5-b5ba-22000a24170b",
+          "thumbnail": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/video/fc39c4bee1934eacbf1bc52bbb2fd513/thumb-00001.jpg"
+          },
+          "title": {
+            "primitiveType": "Text",
+            "text": "88 mph"
+          },
+          "video": {
+            "duration": 61,
+            "height": 720,
+            "primitiveType": "Video",
+            "url": "//media.rivet.works/video/fc39c4bee1934eacbf1bc52bbb2fd513/h264/video.mp4",
+            "width": 1280
+          }
+        },
+        {
+          "displayLabel": "The story goes a little somethin' like this:",
+          "ingredientType": "Text",
+          "name": "Story text",
+          "taskId": "775fddb2-3c93-11e5-ae1e-22000a128c8c",
+          "text": {
+            "primitiveType": "Text",
+            "text": "Chuys is a classic Austin spot and always great for some untraditional Tex-mex. The food was great as usual and to top it off, someone took a trip back in time and decided to park the DeLorean out front. This thing looked like the real deal. I want it!"
+          }
+        }
+      ],
+      "likes": 0,
+      "mappings": {
+        "description": 4,
+        "media": 1
+      },
+      "socialUser": null,
+      "sortings": [
+        1,
+        2,
+        3,
+        4,
+        0
+      ],
+      "source": {
+        "id": "775dbac8-3c93-11e5-ae1e-22000a128c8c",
+        "type": "ProjectActivity"
+      },
+      "submissionDate": "2016-02-11T18:58:45.000Z",
       "tags": {
-        "city": ["London" ],
-        "type": ["day"]
+        "_featured": [
+          "true"
+        ],
+        "austinitestatus": [
+          "burntorange"
+        ],
+        "cost": [
+          "twodollar"
+        ],
+        "uid": [
+          "BenLeeSchneider"
+        ]
       },
-      "userName": null, 
-      "userProfilePictureURL": null 
-},
+      "uses": [
+        {
+          "identifier": {
+            "id": "3c766f24-782d-11e5-8c65-22000ad9d511",
+            "type": "Embed"
+          },
+          "likes": 5
+        }
+      ],
+      "valid": true
+    },
     {
-      "caption": "My last Mad Dog",
-      "description": null, 
-      "duration": 10, 
-      "externalLink": null, 
-      "height": 240, 
       "identifier": {
-        "id": "14c6cffa-d617-11e3-9983-28cfe91db661",
+        "id": "7bafdc00-bba0-11e5-9356-22000ae60646",
         "type": "MemberActivity"
       },
-      "imageURL": "//media.rivet.works/video/98eb4be9293d4ba4a81e67711f16bdac/thumb-00001.jpg",
-      "likes": 0, 
-      "mediaDisplayURL": null, 
-      "mediaID": "14c6cffa-d617-11e3-9983-28cfe91db661",
-      "mediaOriginalURL": null, 
-      "mediaThumbURL": "//media.rivet.works/video/98eb4be9293d4ba4a81e67711f16bdac/thumb-00001.jpg",
-      "mediaType": "Video",
-      "tags": {},
-      "userName": null, 
-      "userProfilePictureURL": null, 
-      "videoURL": "//media.rivet.works/video/98eb4be9293d4ba4a81e67711f16bdac/h264/video.mp4",
-      "width": 320
+      "ingredients": [
+        {
+          "displayLabel": "Where it happened:",
+          "googlePlaceID": {
+            "primitiveType": "Text",
+            "text": "ChIJvxoI1ge1RIYRbbmLEppInaE"
+          },
+          "ingredientType": "Location",
+          "latitude": {
+            "primitiveType": "Numeric",
+            "value": 30.26452399999999
+          },
+          "locationText": {
+            "primitiveType": "Text",
+            "text": "JW Marriott Austin"
+          },
+          "longitude": {
+            "primitiveType": "Numeric",
+            "value": -97.74343499999998
+          },
+          "taskId": "cbe64eca-3c93-11e5-b061-22000a128c8c"
+        },
+        {
+          "display640Original": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/aa6e71e093e9451188c3243f78a4cec0.jpeg"
+          },
+          "display640Square": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/29ebb76e46744a619509b7f3a10c5515.jpeg"
+          },
+          "ingredientType": "Photo",
+          "name": "Hero media",
+          "photo": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/29ebb76e46744a619509b7f3a10c5515.jpeg"
+          },
+          "taskId": "775e7972-3c93-11e5-ae1e-22000a128c8c",
+          "thumbnail": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/29ebb76e46744a619509b7f3a10c5515.jpeg"
+          },
+          "title": {
+            "primitiveType": "Text",
+            "text": "Lobby"
+          }
+        },
+        {
+          "display640Original": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/f6e8102543994a10b955328d04379ffc.jpeg"
+          },
+          "display640Square": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/7757b8c98c654e6c9316732ec177523b.jpeg"
+          },
+          "ingredientType": "Photo",
+          "photo": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/7757b8c98c654e6c9316732ec177523b.jpeg"
+          },
+          "taskId": "9d235416-3c93-11e5-bfdd-22000a24170b",
+          "thumbnail": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/7757b8c98c654e6c9316732ec177523b.jpeg"
+          },
+          "title": {
+            "primitiveType": "Text",
+            "text": "Outdoor seating at Corner Bar"
+          }
+        },
+        {
+          "display640Original": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/029321ee603d4865b6fc50846d60b8d4.jpeg"
+          },
+          "display640Square": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/12d6d3c97a5c4b3abd34c54bd9aa1663.jpeg"
+          },
+          "ingredientType": "Photo",
+          "photo": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/12d6d3c97a5c4b3abd34c54bd9aa1663.jpeg"
+          },
+          "taskId": "b767d55e-3c93-11e5-b5ba-22000a24170b",
+          "thumbnail": {
+            "primitiveType": "Photo",
+            "url": "//media.rivet.works/12d6d3c97a5c4b3abd34c54bd9aa1663.jpeg"
+          },
+          "title": {
+            "primitiveType": "Text",
+            "text": "\"He was no Tina\""
+          }
+        },
+        {
+          "displayLabel": "The story goes a little somethin' like this:",
+          "ingredientType": "Text",
+          "name": "Story text",
+          "taskId": "775fddb2-3c93-11e5-ae1e-22000a128c8c",
+          "text": {
+            "primitiveType": "Text",
+            "text": "We had a little team meetup & happy hour outside at the Corner Bar. Our server was really attentive, and it was a nice, mellow setting. The beer and drink menu seemed to have a lot of great stuff on it; I went with the Live Oak Hef, which I really like."
+          }
+        }
+      ],
+      "likes": 0,
+      "mappings": {
+        "description": 4,
+        "media": 1
+      },
+      "socialUser": null,
+      "sortings": [
+        1,
+        2,
+        3,
+        4,
+        0
+      ],
+      "source": {
+        "id": "775dbac8-3c93-11e5-ae1e-22000a128c8c",
+        "type": "ProjectActivity"
+      },
+      "submissionDate": "2016-01-15T16:08:24.000Z",
+      "tags": {
+        "_featured": [
+          "true"
+        ],
+        "austinitestatus": [
+          "decade"
+        ],
+        "cost": [
+          "onedollar"
+        ]
+      },
+      "uses": [
+        {
+          "identifier": {
+            "id": "3c766f24-782d-11e5-8c65-22000ad9d511",
+            "type": "Embed"
+          },
+          "likes": 1
+        }
+      ],
+      "valid": true
     }
-  ]
+  ],
+  "success": true,
+  "summarizations": {
+  },
+  "totalResults": 142
 }
 ```
 ### Response Properties
 
-Successful responses from the Content API contain the following top–level properties.
+Successful responses from the Content API contain the following top–level properties. The other properties at the top level are for Rivet’s use by our display.
 
 | name         | description                                                                                                                           |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
@@ -196,15 +501,17 @@ All data objects have these properties.
 
 | name        | description                                                                               |
 | ----------- | ----------------------------------------------------------------------------------------- |
-| caption     | he user response to the caption of the first photo/video task in the submitting activity. |
-| description | The user response to the first free text task in the submitting activity.
 | identifier | A unique identifier assigned by the Rivet platform to a user’s responses to an activity. |
-| likes | Number of times viewers of this content clicked the like icon in the Rivet display.
-| imageURL | URL to the photo or the first frame of the video submitted by a user to the first photo/video task in the activity. This is the default 640x640 image the Rivet platform automatically generates. |
-| mediaThumbURL | URL to a smaller version of the photo or the first frame of a video. |
-| mediaID | Unique identifier for a piece of content in the Rivet system. |
-| mediaType | Type of content; either photo or video. |
+| source | A unique identifier assigned by the Rivet platform to the collector or curated album that contains the content. |
 | tags | Any tags associated with the content. |
+| uses | A list of how this content has been used throughout the Rivet system. |
+| submissionDate | The date the content contributor supplied the content. |
+| mappings | A mapping of named ingredients to their index in the ingredients list. |
+| ingredients | A list of elements that make up collection of content. |
+| sortings | A list of indexes that define the order in which the content of the ingredients list should appear. |
+| socialUser | The creator of curated media. This only applies to album media content. |
+| likes | Number of times viewers of this content clicked the like icon in the Rivet display. |
+| valid | A boolean value that indicates whether the piece of content is valid. If there are any issues processing a piece of content the value of this property will be false. |
 {:.table .table-responsive}
 
 ### Ingredient Properties
@@ -212,10 +519,10 @@ Each object in the ingredients array have the following properties in common.
 
 | name | description |
 | ---- | ----------- |
-| ingredientType | |
-| name | |
-| taskId | |
-| displayLabel | |
+| ingredientType | The kind of ingredient. The next section lists the possible ingredient types. |
+| name | The symbolic name for the ingredient. You can name an ingredient using the Rivet Administrative Interface. |
+| taskId | The identifier for the task within a collector.  |
+| displayLabel | The label for the ingredient intended to display in a user interface. You can give an ingredient a display label using the Rivet Administrative Interface. |
 {:.table .table-responsive}
 
 
@@ -223,67 +530,67 @@ Each object in the ingredients array have the following properties in common.
 
 The following lists all possible ingredient types.
 
-- Location	
-- MultiSelect	
-- Photo	
-- QuestionGroup	
-- Rating	
-- SingleSelect	
-- Slider	
-- SocialUser	
-- Text	
-- Video	
+- Location
+- Multi Select
+- Photo
+- Question Group
+- Rating
+- Single Select
+- Slider
+- Social User
+- Text
+- Video
 
-### Ingredient Primitives	
+## Ingredients
+
+The following sections details each of the different kinds of ingredients that make up data objects.
+
+### Ingredient Primitives
 
 Each type of ingredient has properties specific to that type. Ingredient–specific properties are called primitives. The following is a list of possible primitives.
 
 | name | description |
 | ---- | ----------- |
-| Link |  |
-| Numeric	 |  |
-| Photo	 |  |
-| Text	 |  |
-| Video	 |  |
-| YouTube	 |  |
+| Link | A URL to a resource on the internet along with a title; for example to a web page. |
+| Numeric | A value that is a number such as an integer or a float. |
+| Photo | The URL to a photo along with dimensions. |
+| Text | A block of text. |
+| Video | A URL to a video along with dimensions and duration. |
+| YouTube | A URL to a YouTube video. Does not have dimensions or duration. |
 {:.table .table-responsive}
-
-## Ingredients
-
-The following sections details each of the differnt kinds of ingredients that make up data objects.
 
 ### Location
 
 Primitive properties that apply to location ingredient types.
 
-| name | description |
-| ---- | ----------- |
-| latitude | URL to the image with a resolution as configured in the Rivet Administrative Interface. This is the custom resolution image the Rivet platform generates based on the photo task configuration. |
-| longitude | URL to the original full resolution photo the user submitted. |
-| locationText | |
-| googlePlaceId | |
+| name | primitive | description |
+| ---- | --------- | ----------- |
+| latitude | numeric | The latitude of a location expressed as a floating point number of degrees.<br>Positive number are north latitude and negative numbers are south latitude. |
+| longitude | numeric | The longitude of a location expressed as a floating point number of degrees.<br>Positive number are east longitude and negative numbers are west longitude. |
+| locationText | text | The name of the location. |
+| googlePlaceId | text | The Google place ID for the location. |
 {:.table .table-responsive}
 
-### Multi–Select
+### Multi Select
 
 Primitive properties that apply to multi select ingredient types.
 
-| name | description |
-| ---- | ----------- |
-| choices |	|
+| name | primitive | description |
+| ---- | --------- | ----------- |
+| choices | text | List of text primitives of the choices the content contributor made with doing the mulit–select task.<br>Each element is the text of the choice for multi-select text tasks and the identifier of the choice for multi-select image tasks. |
 {:.table .table-responsive}
 
 ### Photo
 
 Primitive properties that apply to photo ingredient types.
 
-| name | description |
-| ---- | ----------- |
-| photo | URL to the image with a resolution as configured in the Rivet Administrative Interface. This is the custom resolution image the Rivet platform generates based on the photo task configuration. |
-| display640Square | URL to the original full resolution photo the user submitted. |
-| display640Original | |
-| title | |
-| thumbnail | |
+| name | primitive | description |
+| ---- | --------- | ----------- |
+| photo | photo | **Deprecated**. Use display640Square instead. |
+| display640Square | photo | A photo that is 640 pixels wide and tall. This is the portion of the photo the content contributor selected during the visual media task in the collector. |
+| display640Original | photo | A photo that is at the same aspect ratio as the original photo the content contributor selected during the visual media task in the collector. The longest dimension of the photo is 640 pixels with the other dimension shortened to maintain the original aspect ratio.  |
+| title | text | The caption of the photo the content contributor provided during the visual media task in the collector |
+| thumbnail | photo | **Deprecated**. Use display640Square instead. |
 {:.table .table-responsive}
 
 
@@ -291,62 +598,78 @@ Primitive properties that apply to photo ingredient types.
 
 Properties that apply only to question group ingredients.
 
+**Note:** The question group ingredient does not use primitives and is instead a list of objects with the following properties.
+{:.fa-thumbs-up.icon-holder .callout-block .callout-success}
+
 | name | description |
 | ---- | ----------- |
+| displayLabel | The display label for the question as configured in the Rivet Administrative Interface. |
+| answer | The answer the content contributor provided while doing the question group task of the collector. |
+| visibility | Whether the content should be displayed. The Rivet platform allows administrators to supersede answers with newer choices. |
 {:.table .table-responsive}
 
 ### Rating
 
 Primitive properties that apply to rating ingredient types.
 
-| name | description |
-| ---- | ----------- |
+| name | primitive | description |
+| ---- | --------- | ----------- |
+| rating | numeric | The value the content contributor selected while doing the rating task of the collector. |
 {:.table .table-responsive}
 
-### Single–Select
+### Single Select
 
-Primitive properties that apply to multi select ingredient types.
+Primitive properties that apply to single select ingredient types.
 
-| name | description |
-| ---- | ----------- |
+| name | primitive | description |
+| ---- | --------- | ----------- |
+| choice | text | The choice the content contributor made for the select task of the collector.<br>It is the text of the choice for single-select text tasks and the identifier of the choice for single-select image tasks. |
 {:.table .table-responsive}
 
 ### Slider
 
 Primitive properties that apply to slider ingredient types.
 
-| name | description |
-| ---- | ----------- |
+| name | primitive | description |
+| ---- | --------- | ----------- |
+| value | numeric | The value the content contributor selected while doing the slider task of the collector.  |
+| startLabel | text | The label of the starting value. |
+| endLabel | text | The label of the ending value. |
+| points | numeric | The number of points on the slider. |
 {:.table .table-responsive}
 
-### SocialUser
+### Social User
 
 Primitive properties that apply to social user ingredient types.
 
-| name | description |
-| ---- | ----------- |
+| name | primitive | description |
+| ---- | --------- | ----------- |
+| userName | text | The user name from the social network. |
+| userImage | photo | The image of the user from the social network.  |
+| userLink | link | The link to the user's presence in the social network.  |
+| profileProvider | text | The social network of the user. The possible values are:<br>- Instagram<br>- Facebook<br>- Twitter<br>- Pinterest<br>- Google<br>- LinkedIn |
 {:.table .table-responsive}
 
 ### Text
 
 Primitive properties that apply to text ingredient types.
 
-| name | description |
-| ---- | ----------- |
+| name | primitive | description |
+| ---- | --------- | ----------- |
+| text | text | The text the content contributor provided while doing the task.  |
 {:.table .table-responsive}
 
 ### Video
 
 Primitive properties that apply to video ingredient types.
 
-| name | description |
-| ---- | ----------- |
-|photo | URL to the image with a resolution as configured in the Rivet Administrative Interface. This is the custom resolution image the Rivet platform generates based on the photo task configuration. |
-| display640Square | URL to the original full resolution photo the user submitted. |
-| display640Original | |
-| title | |
-| thumbnail | |
-| video | |
+| name | primitive | description |
+| ---- | --------- | ----------- |
+| photo | photo | **Deprecated**. Use display640Square instead. |
+| display640Square | photo | A photo that is 640 pixels wide and tall. This is the first frame of the video that the content contributor provided during the visual media task in the collector. |
+| title | text | The caption of the video the content contributor provided during the visual media task in the collector |
+| thumbnail | photo | **Deprecated**. Use display640Square instead. |
+| video | video | The video that the content contributor provided during the visual media task in the collector.  |
 {:.table .table-responsive}
 
 ## Errors
@@ -361,12 +684,12 @@ If the API encounters an error, the response from the API is the following.
 }
 ```
 
-| code | message | description |	
-| ---- | ------- | ----------- |	
+| code | message | description |
+| ---- | ------- | ----------- |
 | -1 | Technical difficulties | An unexpected error has occurred. Contact Rivet Support at support@rivet.works for assistance. |
 | -2 | Search error | An error has occurred with the Rivet search engine. Contact Rivet Support at support@rivet.works for assistance. |
 | -6 | display not found | The call to the API specifies an display that is not in the Rivet system. |
-| -5 | Limit must be one or greater	You must ask for at least one content item. |
+| -5 | Limit must be one or greater | You must ask for at least one content item. |
 | -4 | Offset must be zero or greater | The offset into the results cannot be negative. |
 | -3 | Error in qualifier | The qualifier is not Rison encoded correctly. The API includes additional information about where the encoding error is in the Rison. |
 {:.table .table-responsive}
@@ -374,4 +697,3 @@ If the API encounters an error, the response from the API is the following.
 ## CORS
 
 The API is CORS compliant. If JavaScript from a web page calls the API, the browser must send CORS headers.
-
