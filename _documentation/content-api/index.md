@@ -16,7 +16,7 @@ http://api.rivet.works/embedded/data/{embedIdentifier}
 
 The “embedIdentifier” at the end of the URL is the ID that the Rivet platform assigned to the display. You can also define a unique display key in the Rivet Administrative Interface and use that in the API call. The display key allows for “friendlier” URL formats. Each display key must be unique across the Rivet platform.
 
-### Optional Query Parameters
+### Optional query parameters
 
 |name    |description                                                                                                                                                             |default value|
 |--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
@@ -30,7 +30,7 @@ The “embedIdentifier” at the end of the URL is the ID that the Rivet platfor
 **Note:** The limit and offset parameters support paging through content.
 {:.fa-thumbs-up.icon-holder .callout-block .callout-success}
 
-### Filtering Results
+### Filtering results
 
 The Content API allows you to filter results using tags and location data. Tags are assigned to content when users complete a Rivet activity. Also, moderators using the Rivet Administrative Interface can edit the tags for user activity submissions.  Location data is based on the geolocation information provided by the user or that an uploaded photo contains.
 
@@ -68,6 +68,7 @@ The following is an example of a JSON page context and its corresponding Rison q
 
 
 For more information about Rison please see https://github.com/Nanonid/rison
+
 ### Showing specific content
 
 In addition to filtering it is possible to request specific pieces of content from the API. You can ask for content by its submission identifier. This Rivet Administrative Interface shows submission identifiers in the moderation interface. The submission identifier is also in the response from the Content API at the `identifier.id` path for each data element.
@@ -78,12 +79,10 @@ The following is an example of a JSON page context that asks for two specific pi
 
 ```
 "pageContext": {
-  {
-    "submissionIds": [
-      "4992d848-d0f0-11e5-9577-22000afe5763",
-      "7bafdc00-bba0-11e5-9356-22000ae60646"
-    ]
-  }
+  "submissionIds": [
+    "4992d848-d0f0-11e5-9577-22000afe5763",
+    "7bafdc00-bba0-11e5-9356-22000ae60646"
+  ]
  }
 ```
 #### Rison
@@ -109,6 +108,47 @@ The qualifier supports three top-level keys for tags, geolocations, and submissi
 
 **Note:** While the top-level Rison keys are shortened to make request URLs more compact, the keys of the tags and geoRegion objects are not shortened.
 {:.fa-thumbs-up.icon-holder .callout-block .callout-success}
+
+### Sorting results
+
+The Content API allows you to sort results using a variety of properties. What to sort by is a list of property and sort direction pairs. The Content API sorts results by the first property in the sort order list. The API then sorts using the second property within the first and so on.
+
+By default the Content API sorts result by their submission date with the most recent submission first. Specifying a sort replaces the default submission date sort. If you want to sort content by some property and then by submission date, you must include the submission date in your sort order list.
+
+Rivet displays use the page context for specifying the sorting of content. Because of this, sorting using the Content API follows a similar pattern to filtering. Below are examples of specifying a sorting in a page context and the corresponding Rison.
+
+#### JSON
+
+```
+"pageContext": {
+  "sortOrder": [
+    {
+      "field": "tags.rank",
+      "order": "asc"
+    },
+    {
+      "field": "submissionDate",
+      "order": "desc"
+    }
+  ]
+ }
+```
+
+#### Rison
+
+```
+!((f:tags.rank,o:asc),(f:submissionDate,o:desc))
+```
+
+### Sorting keys
+
+The sort order supports two top-level keys for the field to sort by and the direction of the sort. See the section “Website Integration” in the “Rivet Implementation Guide” for more information about sorting.
+
+| name | description                                                    |
+| ---- | -------------------------------------------------------------- |
+| f    | Analogous to the field key in a display’s page context.        |
+| o    | Analogous to the order key in a display’s page context.        |
+{:.table .table-responsive}
 
 ### Examples
 Below are examples of calls to the API. The qualifier parameters in the examples are not URL encoded for ease of reading. In production use, the qualifier should be URL encoded.
@@ -146,17 +186,20 @@ http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=24&i=1928
 http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=24&i=192837&q=(g:(lat:40.833333333,lon:14.25,r:'5 mi'),t:(season:summer))
 ```
 
-### Sorting Results
-
-**_TO DO_** Modo typi qui nunc nobis videntur parum clari fiant sollemnes in. Doming id quod mazim placerat facer possim assum typi non habent. Insitam est usus legentis in iis qui facit eorum claritatem Investigationes demonstraverunt lectores legere! Nam liber tempor cum soluta nobis eleifend option congue nihil. Sed diam nonummy nibh euismod tincidunt, ut laoreet dolore magna aliquam erat volutpat ut!
-
-Veniam quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut. Assum typi non habent claritatem insitam est usus legentis in iis. Te feugait nulla facilisi nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet. Claritas est etiam processus dynamicus qui sequitur mutationem consuetudium lectorum mirum est notare quam littera. Consequat duis autem vel eum iriure, dolor in hendrerit. Commodo in vulputate velit esse molestie consequat vel illum dolore. Diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-
-Mazim placerat facer possim assum typi non habent claritatem insitam est usus. Vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio. Lobortis nisl ut aliquip ex ea commodo consequat duis autem vel eum iriure. Ut laoreet dolore magna aliquam erat volutpat ut wisi enim ad minim veniam quis. In vulputate velit esse molestie consequat dignissim qui. Nunc nobis videntur parum clari fiant sollemnes in.
-
-
 ## Responses from the API
 
+### Response properties
+
+Successful responses from the Content API contain the following top–level properties. The other properties at the top level are for Rivet’s use by our display.
+
+| name         | description                                                                                                                           |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| success      | Indicates the success of the API call; true for successful execution and false if there is an error.                                  |
+| totalResults | The number of items that the API found for the display that match the search qualifiers.                                                |
+| data         | A subset of the results based on the limit and offset. See the next section for more information about the objects in the data array. |
+{:.table .table-responsive}
+
+### Example response
 The response from the API is a JSON object. Below is an example of a response from the API from the display for the [Rivet culture page](http://www.rivet.works/our-culture).
 
 ```
@@ -480,22 +523,9 @@ The response from the API is a JSON object. Below is an example of a response fr
   "totalResults": 142
 }
 ```
-### Response Properties
-
-Successful responses from the Content API contain the following top–level properties. The other properties at the top level are for Rivet’s use by our display.
-
-| name         | description                                                                                                                           |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
-| success      | Indicates the success of the API call; true for successful execution and false if there is an error.                                  |
-| totalResults | The number of items that the API found for the display that match the search qualifiers.                                                |
-| data         | A subset of the results based on the limit and offset. See the next section for more information about the objects in the data array. |
-{:.table .table-responsive}
-
-## Data Objects
+## Data objects
 
 Objects in the data array represent content for a display.
-
-### Common Properties
 
 All data objects have these properties.
 
@@ -514,7 +544,11 @@ All data objects have these properties.
 | valid | A boolean value that indicates whether the piece of content is valid. If there are any issues processing a piece of content the value of this property will be false. |
 {:.table .table-responsive}
 
-### Ingredient Properties
+## Ingredients
+
+The following sections details each of the different kinds of ingredients that make up data objects.
+
+### Ingredient properties
 Each object in the ingredients array have the following properties in common.
 
 | name | description |
@@ -525,8 +559,7 @@ Each object in the ingredients array have the following properties in common.
 | displayLabel | The label for the ingredient intended to display in a user interface. You can give an ingredient a display label using the Rivet Administrative Interface. |
 {:.table .table-responsive}
 
-
-#### Ingredient Types
+### Ingredient types
 
 The following lists all possible ingredient types.
 
@@ -541,11 +574,7 @@ The following lists all possible ingredient types.
 - Text
 - Video
 
-## Ingredients
-
-The following sections details each of the different kinds of ingredients that make up data objects.
-
-### Ingredient Primitives
+### Ingredient primitives
 
 Each type of ingredient has properties specific to that type. Ingredient–specific properties are called primitives. The following is a list of possible primitives.
 
@@ -571,7 +600,7 @@ Primitive properties that apply to location ingredient types.
 | googlePlaceId | text | The Google place ID for the location. |
 {:.table .table-responsive}
 
-### Multi Select
+### Multi select
 
 Primitive properties that apply to multi select ingredient types.
 
@@ -594,7 +623,7 @@ Primitive properties that apply to photo ingredient types.
 {:.table .table-responsive}
 
 
-### Question Group
+### Question group
 
 Properties that apply only to question group ingredients.
 
@@ -617,7 +646,7 @@ Primitive properties that apply to rating ingredient types.
 | rating | numeric | The value the content contributor selected while doing the rating task of the collector. |
 {:.table .table-responsive}
 
-### Single Select
+### Single select
 
 Primitive properties that apply to single select ingredient types.
 
@@ -638,7 +667,7 @@ Primitive properties that apply to slider ingredient types.
 | points | numeric | The number of points on the slider. |
 {:.table .table-responsive}
 
-### Social User
+### Social user
 
 Primitive properties that apply to social user ingredient types.
 
