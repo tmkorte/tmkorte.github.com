@@ -20,17 +20,18 @@ The “embedIdentifier” at the end of the URL is the ID that the Rivet platfor
 
 |name    |description                                                                                                                                                             |default value|
 |--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
-|limit   |Number of data items for the API to return.                                                                                                                             |24           |
-|offset  |Index into the result set from which to start returning results.                                                                                                        |0            |
-|q       |Qualifiers for filtering the results. See section “Filtering Results”.                                                                                                  |None         |
-|callback|Support for JSONP. Passing a function name as the “callback” parameter to the API will return the result object wrapped with a JavaScript function call to the callback.|None         |
-|i       |Tracking identifier that you define. This allows you to track user activity through our analytics.                                                                      |None         |
+| limit |Number of data items for the API to return. | 24 |
+| offset |Index into the result set from which to start returning results. | 0 |
+| q |Qualifiers for filtering the results. See section “[Filtering Results](#filtering_results)”. | None |
+| sort | The order in which to receive results. See section “[Sorting Results](#sorting_results)”  | Submission date, most recent first |
+| callback |Support for JSONP. Passing a function name as the “callback” parameter to the API will return the result object wrapped with a JavaScript function call to the callback.| None |
+| i |Tracking identifier that you define. This allows you to track user activity through our analytics. | None |
 {:.table .table-responsive}
 
 **Note:** The limit and offset parameters support paging through content.
 {:.fa-thumbs-up.icon-holder .callout-block .callout-success}
 
-### Filtering results
+### <a name="filtering_results"></a>Filtering results
 
 The Content API allows you to filter results using tags and location data. Tags are assigned to content when users complete a Rivet activity. Also, moderators using the Rivet Administrative Interface can edit the tags for user activity submissions.  Location data is based on the geolocation information provided by the user or that an uploaded photo contains.
 
@@ -60,7 +61,7 @@ The following is an example of a JSON page context and its corresponding Rison q
 #### Rison
 
 ```
-(t:(city:!(Austin,London),type:day),g:(lat:40.833333333,lon:14.25,r:'5 km')
+q=(t:(city:!(Austin,London),type:day),g:(lat:40.833333333,lon:14.25,r:'5 km')
 ```
 
 **Note:** The Rison qualifier must be URL encoded.
@@ -88,7 +89,7 @@ The following is an example of a JSON page context that asks for two specific pi
 #### Rison
 
 ```
-(s:!('4992d848-d0f0-11e5-9577-22000afe5763','7bafdc00-bba0-11e5-9356-22000ae60646'))
+q=(s:!('4992d848-d0f0-11e5-9577-22000afe5763','7bafdc00-bba0-11e5-9356-22000ae60646'))
 ```
 
 **Note:** The Rison qualifier must be URL encoded.
@@ -109,9 +110,9 @@ The qualifier supports three top-level keys for tags, geolocations, and submissi
 **Note:** While the top-level Rison keys are shortened to make request URLs more compact, the keys of the tags and geoRegion objects are not shortened.
 {:.fa-thumbs-up.icon-holder .callout-block .callout-success}
 
-### Sorting results
+### <a name="sorting_results"></a>Sorting results
 
-The Content API allows you to sort results using a variety of properties. What to sort by is a list of property and sort direction pairs. The Content API sorts results by the first property in the sort order list. The API then sorts using the second property within the first and so on.
+The Content API allows you to sort results using a variety of properties. What to sort by is a list of property and sort order pairs. The Content API sorts results by the first property in the sort order list. The API then sorts using the second property within the first and so on.
 
 By default the Content API sorts result by their submission date with the most recent submission first. Specifying a sort replaces the default submission date sort. If you want to sort content by some property and then by submission date, you must include the submission date in your sort order list.
 
@@ -137,12 +138,12 @@ Rivet displays use the page context for specifying the sorting of content. Becau
 #### Rison
 
 ```
-!((f:tags.rank,o:asc),(f:submissionDate,o:desc))
+sort=!((f:tags.rank,o:asc),(f:submissionDate,o:desc))
 ```
 
 ### Sorting keys
 
-The sort order supports two top-level keys for the field to sort by and the direction of the sort. See the section “Website Integration” in the “Rivet Implementation Guide” for more information about sorting.
+The sort order supports two top-level keys for the field to sort by and the order of the sort. See the section “Website Integration” in the “Rivet Implementation Guide” for more information about sorting.
 
 | name | description                                                    |
 | ---- | -------------------------------------------------------------- |
@@ -170,9 +171,9 @@ This is how Rivet’s displays most often uses the API. This example results in 
 http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=24&callback=window.dataLoaded
 ```
 
-#### Using the API with a filter for responses tagged with a SKU of M1234/LL.
+#### Using the API with a filter for responses tagged with a cost of two dollars.
 ```
-http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=24&q=(t:(sku:M1234/LL))
+http://api.rivet.works/embedded/data/rivet-culture-grid?q=(t:(cost:twodollar))
 ```
 
 #### Tracking your user using the tracking identifier.
@@ -188,9 +189,7 @@ http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=24&i=1928
 
 ## Responses from the API
 
-### Response properties
-
-Successful responses from the Content API contain the following top–level properties. The other properties at the top level are for Rivet’s use by our display.
+The response from the API is a JSON object. Successful responses from the Content API contain the following top–level properties. The other properties at the top level are for Rivet’s use by our display and subject to change.
 
 | name         | description                                                                                                                           |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
@@ -200,7 +199,7 @@ Successful responses from the Content API contain the following top–level prop
 {:.table .table-responsive}
 
 ### Example response
-The response from the API is a JSON object. Below is an example of a response from the API from the display for the [Rivet culture page](http://www.rivet.works/our-culture).
+Below is an example of a response from the API from the display for the [Rivet culture page](http://www.rivet.works/our-culture).
 
 ```
 {
@@ -544,6 +543,9 @@ All data objects have these properties.
 | valid | A boolean value that indicates whether the piece of content is valid. If there are any issues processing a piece of content the value of this property will be false. |
 {:.table .table-responsive}
 
+**Note:** The `sortings` property of each data object dictates the order our display shows ingredients. Do not assume the the order of the ingredients will always be the same. Each data object in the response and its subsequent properties should be treated independently.
+{:.fa-fa-exclamation-triangle.icon-holder .callout-block .callout-danger}
+
 ## Ingredients
 
 The following sections details each of the different kinds of ingredients that make up data objects.
@@ -580,7 +582,7 @@ Each type of ingredient has properties specific to that type. Ingredient–speci
 
 | name | description |
 | ---- | ----------- |
-| Link | A URL to a resource on the internet along with a title; for example to a web page. |
+| Link | A scheme-less URL to a resource on the internet along with a title; for example to a web page. |
 | Numeric | A value that is a number such as an integer or a float. |
 | Photo | The URL to a photo along with dimensions. |
 | Text | A block of text. |
@@ -634,7 +636,7 @@ Properties that apply only to question group ingredients.
 | ---- | ----------- |
 | displayLabel | The display label for the question as configured in the Rivet Administrative Interface. |
 | answer | The answer the content contributor provided while doing the question group task of the collector. |
-| visibility | Whether the content should be displayed. The Rivet platform allows administrators to supersede answers with newer choices. |
+| visibility | The Rivet platform allows administrators to supersede answers with newer choices. This flag indicates that this question group has been superseded. You may choose whether to show the content of this question group to your users or not. |
 {:.table .table-responsive}
 
 ### Rating

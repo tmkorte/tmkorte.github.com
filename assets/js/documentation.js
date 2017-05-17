@@ -8,7 +8,7 @@ $('.doc-body').scrollNav({
     topLinkText: 'Introduction',
     fixedMargin: 40,
     scrollOffset: 40,
-    animated: true,
+    animated: false,
     speed: 500,
     insertTarget: '#doc-menu',
     insertLocation: 'prependTo',
