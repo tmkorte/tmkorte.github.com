@@ -5,16 +5,22 @@ title: Rivet Content API
 The Rivet Platform allows brands and retailers to collect a variety of engaging user generated content – including rich media (photos and videos), geolocation, and commentary – directly from their customers. Rivet offers a collection of embeddable JavaScript displays that allow brands and retailers to easily display the user generated content on their own websites using only a few lines of code. For those customers in search of a more custom display experience, we offer the Rivet Content API. Customers can use the API to create their own galleries of user generated content and integrate the content anywhere on their website.
 
 The Content API returns user generated content based on an display’s data and moderation configuration. Customers create and configure displays using the Rivet Administrative Interface. The Content API also allows for filtering the results it returns based on tags and location data associated with the content.
+{:.section-block}
 
 ## Calling the API
 
 You call the API using the following endpoint. This example returns 24 pieces of content starting at the beginning of the results set.
 
 ```
-http://api.rivet.works/embedded/data/{embedIdentifier}
+http://api.rivet.works/embedded/data/{displayIdentifier}
 ```
 
-The “embedIdentifier” at the end of the URL is the ID that the Rivet platform assigned to the display. You can also define a unique display key in the Rivet Administrative Interface and use that in the API call. The display key allows for “friendlier” URL formats. Each display key must be unique across the Rivet platform.
+The `displayIdentifier` at the end of the URL is the ID that the Rivet platform assigned to the display. You can also define a unique display key in the Rivet Administrative Interface and use that in the API call. The display key allows for “friendlier” URL formats. Each display key must be unique across the Rivet platform.
+
+There are three ways to affect the results the API returns for a display. You can configure a display using the Rivet Administrative Interface, moderate content using the Rivet Administrative Interface, and [filter results](#filtering_results) in the call to the API. When you configure a display you can specify the sources for the content of a display. You can also configure the publishing mode of a display. If you select "hide response before moderation" as the publishing mode, the Content API will return only approved content.
+
+The Content API never returns rejected content.
+{:.fa-thumbs-up.icon-holder .callout-block .callout-info}
 
 ### Optional query parameters
 
@@ -73,6 +79,9 @@ For more information about Rison please see https://github.com/Nanonid/rison
 ### Showing specific content
 
 In addition to filtering it is possible to request specific pieces of content from the API. You can ask for content by its submission identifier. This Rivet Administrative Interface shows submission identifiers in the moderation interface. The submission identifier is also in the response from the Content API at the `identifier.id` path for each data element.
+
+The Content API will return the content you specify regardless of the publishing mode. The Content API never returns rejected content
+{:.fa-thumbs-up.icon-holder .callout-block .callout-info}
 
 The following is an example of a JSON page context that asks for two specific pieces of content followed by it's corresponding Rison qualifier:
 
@@ -156,19 +165,19 @@ Below are examples of calls to the API. The qualifier parameters in the examples
 
 #### Loading the first “page” of content with 24 pieces of content per page:
 ```
-http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=0
+http://api.rivet.works/embedded/data/{displayIdentifier}?limit=24&offset=0
 ```
 
 #### Loading the second page of content.
 Notice that the limit is added to the offset for each page.
 ```
-http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=24
+http://api.rivet.works/embedded/data/{displayIdentifier}?limit=24&offset=24
 ```
 
 #### Calling the API with a JSONP callback function.
 This is how Rivet’s displays most often uses the API. This example results in a call to the window.dataLoaded function with the response from the API as the only parameter. It is up to you to write the callback function.
 ```
-http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=24&callback=window.dataLoaded
+http://api.rivet.works/embedded/data/{displayIdentifier}?limit=24&offset=24&callback=window.dataLoaded
 ```
 
 #### Using the API with a filter for responses tagged with a cost of two dollars.
@@ -178,13 +187,13 @@ http://api.rivet.works/embedded/data/rivet-culture-grid?q=(t:(cost:twodollar))
 
 #### Tracking your user using the tracking identifier.
 ```
-http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=24&i=192837
+http://api.rivet.works/embedded/data/{displayIdentifier}?limit=24&offset=24&i=192837
 ```
 
 #### Getting responses within a 5 mile radius of a location tagged with summer.
 
 ```
-http://api.rivet.works/embedded/data/{embedIdentifier}?limit=24&offset=24&i=192837&q=(g:(lat:40.833333333,lon:14.25,r:'5 mi'),t:(season:summer))
+http://api.rivet.works/embedded/data/{displayIdentifier}?limit=24&offset=24&i=192837&q=(g:(lat:40.833333333,lon:14.25,r:'5 mi'),t:(season:summer))
 ```
 
 ## Responses from the API
@@ -530,8 +539,8 @@ All data objects have these properties.
 
 | name        | description                                                                               |
 | ----------- | ----------------------------------------------------------------------------------------- |
-| identifier | A unique identifier assigned by the Rivet platform to a user’s responses to an activity. |
-| source | A unique identifier assigned by the Rivet platform to the collector or curated album that contains the content. |
+| identifier | An object that uniquely identifies a piece of content. The object has `id` and `type` properties. The `id` is a UUID for the content assigned by the Rivet platform. The `type` is the kind of content. Possible types are `MemberActivity` or `AlbumMedia`. |
+| source | An object that uniquely identifies the source of a piece of content. The object has `id` and `type` properties. The `id` is a UUID for the source assigned by the Rivet platform. The `type` is the kind of source. Possible types are `ProjectActivity` or `Album`. |
 | tags | Any tags associated with the content. |
 | uses | A list of how this content has been used throughout the Rivet system. |
 | submissionDate | The date the content contributor supplied the content. |
@@ -548,7 +557,7 @@ All data objects have these properties.
 
 ## Ingredients
 
-The following sections details each of the different kinds of ingredients that make up data objects.
+The following sections detail each of the different kinds of ingredients that make up data objects.
 
 ### Ingredient properties
 Each object in the ingredients array have the following properties in common.
