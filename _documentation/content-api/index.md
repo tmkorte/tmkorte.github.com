@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Rivet Content API
+summary: Habent claritatem insitam est usus legentis in iis qui facit eorum claritatem Investigationes. Adipiscing elit sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam. Facilisi nam liber tempor, cum soluta nobis eleifend option? Putamus parum claram anteposuerit litterarum formas humanitatis per seacula quarta decima.
 ---
 The Rivet Platform allows brands and retailers to collect a variety of engaging user generated content – including rich media (photos and videos), geolocation, and commentary – directly from their customers. Rivet offers a collection of embeddable JavaScript displays that allow brands and retailers to easily display the user generated content on their own websites using only a few lines of code. For those customers in search of a more custom display experience, we offer the Rivet Content API. Customers can use the API to create their own galleries of user generated content and integrate the content anywhere on their website.
 
