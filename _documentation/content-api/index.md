@@ -12,7 +12,7 @@ The Content API returns user generated content based on an display’s data and 
 You call the API using the following endpoint. This example returns 24 pieces of content starting at the beginning of the results set.
 
 ```
-http://api.rivet.works/embedded/data/{displayIdentifier}
+https://api.rivet.works/embedded/data/{displayIdentifier}
 ```
 
 The `displayIdentifier` at the end of the URL is the ID that the Rivet platform assigned to the display. You can also define a unique display key in the Rivet Administrative Interface and use that in the API call. The display key allows for “friendlier” URL formats. Each display key must be unique across the Rivet platform.
@@ -74,7 +74,7 @@ q=(t:(city:!(Austin,London),type:day),g:(lat:40.833333333,lon:14.25,r:'5 km')
 {:.fa-thumbs-up.icon-holder .callout-block .callout-success}
 
 
-For more information about Rison please see https://github.com/Nanonid/rison
+For more information about Rison please see [https://github.com/Nanonid/rison](https://github.com/Nanonid/rison).
 
 ### Showing specific content
 
@@ -121,7 +121,7 @@ The qualifier supports three top-level keys for tags, geolocations, and submissi
 
 ### <a name="sorting_results"></a>Sorting results
 
-The Content API allows you to sort results using a variety of properties. What to sort by is a list of property and sort order pairs. The Content API sorts results by the first property in the sort order list. The API then sorts using the second property within the first and so on.
+The Content API allows you to sort results using a variety of fields. You specify what to sort by using a list of field and sort order pairs. The Content API sorts results by the first field in the sort order list. The API then sorts using the second field within the first and so on.
 
 By default the Content API sorts result by their submission date with the most recent submission first. Specifying a sort replaces the default submission date sort. If you want to sort content by some property and then by submission date, you must include the submission date in your sort order list.
 
@@ -165,35 +165,35 @@ Below are examples of calls to the API. The qualifier parameters in the examples
 
 #### Loading the first “page” of content with 24 pieces of content per page:
 ```
-http://api.rivet.works/embedded/data/{displayIdentifier}?limit=24&offset=0
+https://api.rivet.works/embedded/data/{displayIdentifier}?limit=24&offset=0
 ```
 
 #### Loading the second page of content.
 Notice that the limit is added to the offset for each page.
 ```
-http://api.rivet.works/embedded/data/{displayIdentifier}?limit=24&offset=24
+https://api.rivet.works/embedded/data/{displayIdentifier}?limit=24&offset=24
 ```
 
 #### Calling the API with a JSONP callback function.
 This is how Rivet’s displays most often uses the API. This example results in a call to the window.dataLoaded function with the response from the API as the only parameter. It is up to you to write the callback function.
 ```
-http://api.rivet.works/embedded/data/{displayIdentifier}?limit=24&offset=24&callback=window.dataLoaded
+https://api.rivet.works/embedded/data/{displayIdentifier}?limit=24&offset=24&callback=window.dataLoaded
 ```
 
 #### Using the API with a filter for responses tagged with a cost of two dollars.
 ```
-http://api.rivet.works/embedded/data/rivet-culture-grid?q=(t:(cost:twodollar))
+https://api.rivet.works/embedded/data/rivet-culture-grid?q=(t:(cost:twodollar))
 ```
 
 #### Tracking your user using the tracking identifier.
 ```
-http://api.rivet.works/embedded/data/{displayIdentifier}?limit=24&offset=24&i=192837
+https://api.rivet.works/embedded/data/{displayIdentifier}?limit=24&offset=24&i=192837
 ```
 
 #### Getting responses within a 5 mile radius of a location tagged with summer.
 
 ```
-http://api.rivet.works/embedded/data/{displayIdentifier}?limit=24&offset=24&i=192837&q=(g:(lat:40.833333333,lon:14.25,r:'5 mi'),t:(season:summer))
+https://api.rivet.works/embedded/data/{displayIdentifier}?limit=24&offset=24&i=192837&q=(g:(lat:40.833333333,lon:14.25,r:'5 mi'),t:(season:summer))
 ```
 
 ## Responses from the API
