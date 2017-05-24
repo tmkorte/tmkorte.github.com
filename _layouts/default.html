@@ -39,11 +39,10 @@
     <div class="container">
         <div id="doc-header" class="doc-header text-center">
             <h1 class="doc-title"><span aria-hidden="true" class="icon fa fa-book"></span> {{page.title}}</h1>
-            <div class="meta"><i class="fa fa-clock-o"></i> Last updated: {{page.date | date: '%B %d, %Y'}} </div>
+            <div class="meta"><i class="fa fa-clock-o"></i> Last updated (Mike was here): {{page.date | date: '%B %d, %Y'}} </div>
             {% if page.date %}
             <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date_to_string }}</time>
             {% endif %}
-            Mike was here.
         </div><!--//doc-header-->
         <div class="doc-body">
             <div class="doc-content">
