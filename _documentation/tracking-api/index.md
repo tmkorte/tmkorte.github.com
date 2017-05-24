@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Rivet Tracking API
+summary: The Tracking API enables Rivet analytics and reporting data work for you when you build custom displays. 
 ---
 We have a tracking API that we use for all the interactions with our Rivet displays, collectors, and conversions.
 
