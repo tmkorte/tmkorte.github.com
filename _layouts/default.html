@@ -39,8 +39,9 @@
     <div class="container">
         <div id="doc-header" class="doc-header text-center">
             <h1 class="doc-title"><span aria-hidden="true" class="icon fa fa-book"></span> {{page.title}}</h1>
-            <div class="meta"><i class="fa fa-clock-o"></i> Last updated (Mike was here): {{page.date | date: '%B %d, %Y'}} </div>
+            <div class="meta"><i class="fa fa-clock-o"></i> Last updated (Mike was here, too): {{page.date | date: '%B %d, %Y'}} </div>
             {% if page.date %}
+            We have a date!
             <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date_to_string }}</time>
             {% endif %}
         </div><!--//doc-header-->
