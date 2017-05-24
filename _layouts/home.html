@@ -29,12 +29,14 @@
 
 <body class="landing-page">
 
+  {% include fb-root.html %}
+
     <div class="page-wrapper">
         {% include header-home.html %}
-        <p>
-        <p>
-        <p>
-        <center>{{ content }}</center>
+
+        {% include cards-section.html %}
+
+        {{ content }}
 
     </div><!--//page-wrapper-->
 

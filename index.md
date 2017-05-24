@@ -4,10 +4,3 @@
 # See: https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 layout: home
 ---
-{% for document in site.documentation %}
-
-
-[{{document.title}}]({{document.url}})
-
-
-{% endfor %}

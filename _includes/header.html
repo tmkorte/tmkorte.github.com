@@ -3,7 +3,7 @@
     <div class="container">
         <div class="branding">
             <h1 class="logo">
-                <a href="index.html">
+                <a href="/index.html">
                     <svg class="rvt-logo-svg" width="99px" height="23px" viewbox="0 0 99 23" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
                         <title>Web top bar size</title>
@@ -23,7 +23,8 @@
         </div><!--//branding-->
         <ol class="breadcrumb">
             <li><a href="/index.html">Home</a></li>
-            <li class="active">Showcase</li>
+            <li class="active"><a href="/documentation">Documentation</a></li>
+            {% if page.exclude != true %}{% if page.title != nil %}<li class="active">{{page.title}}</li>{% endif %}{% endif %}
         </ol>
     </div><!--//container-->
 </header><!--//header-->

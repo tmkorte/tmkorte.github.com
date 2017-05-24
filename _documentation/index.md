@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Rivet Developer Documentation
+title: Documentation
 exclude: true
 ---
 | Title | Summary |
